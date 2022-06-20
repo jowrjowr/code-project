@@ -1,9 +1,6 @@
 defmodule QuestionMachineTest do
   use ExUnit.Case, async: true
 
-  @host String.to_charlist("127.0.0.1")
-  @port 8888
-
   setup do
     {:ok, socket: create_socket()}
   end
@@ -402,15 +399,17 @@ defmodule QuestionMachineTest do
            }
   end
 
+  defp create_socket do
+    host = Application.get_env(:server, :ip, "127.0.0.1")
+    port = Application.get_env(:server, :port, 8888)
+    {:ok, socket} = :gen_tcp.connect(String.to_charlist(host), port, [:binary, active: false])
+    socket
+  end
+
   defp send_message(socket, message) do
     :ok = :gen_tcp.send(socket, :erlang.term_to_binary(message))
     {:ok, reply} = :gen_tcp.recv(socket, 0, 1000)
 
     :erlang.binary_to_term(reply)
-  end
-
-  defp create_socket do
-    {:ok, socket} = :gen_tcp.connect(@host, @port, [:binary, active: false])
-    socket
   end
 end

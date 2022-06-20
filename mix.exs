@@ -20,6 +20,8 @@ defmodule QuestionMachine.MixProject do
 
   # Please only use the standard library
   defp deps do
-    []
+    [
+      {:uuid, "~> 1.1"}
+    ]
   end
 end

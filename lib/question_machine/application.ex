@@ -8,6 +8,8 @@ defmodule QuestionMachine.Application do
   @impl true
   def start(_type, _args) do
     children = [
+      QuestionMachine.Server,
+      {DynamicSupervisor, strategy: :one_for_one, name: QuestionMachine.ClientSupervisor}
     ]
 
     opts = [strategy: :one_for_one, name: QuestionMachine.Supervisor]
